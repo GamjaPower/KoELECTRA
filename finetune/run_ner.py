@@ -10,6 +10,11 @@ import torch
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from torch.nn import CrossEntropyLoss
 from fastprogress.fastprogress import master_bar, progress_bar
+import collections
+import collections.abc
+for type_name in collections.abc.__all__:
+    setattr(collections, type_name, getattr(collections.abc, type_name))
+    
 from attrdict import AttrDict
 
 from transformers import (
@@ -255,8 +260,11 @@ def main(cli_args):
         config=config
     )
 
-    # GPU or CPU
-    args.device = "cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu"
+    # MPS or GPU or CPU
+    if torch.backends.mps.is_available(): 
+        args.device = "mps"
+    else:
+        args.device = "cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu"
     model.to(args.device)
 
     # Load dataset
