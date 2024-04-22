@@ -3,5 +3,7 @@ venv/
 __pycache__
 pretrain_tfrecords
 
+
+corpus_dir/
 *.tar.gz
 tfdata*
